@@ -4,20 +4,53 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* IzzyKeep token values — dark is the default (landing + app). */
+:root {
+  --izzy-bg: #0e0f12;
+  --izzy-surface: #16181d;
+  --izzy-surface-2: #1c1f26;
+  --izzy-hairline: #282c34;
+  --izzy-text: #eceef2;
+  --izzy-muted: #8a8f9a;
+  --izzy-steel: #9aa3b2;
+  --izzy-brand: #8b5cf6;
+  --izzy-brand-strong: #7c3aed;
+  --izzy-brand-deep: #6d28d9;
+  --izzy-accent: #a78bfa;
+  --izzy-profit: #a3e635;
+}
+
+/* Day mode — scoped to the app shell only (landing stays dark). */
+.theme-light {
+  --izzy-bg: #f7f7f8;
+  --izzy-surface: #ffffff;
+  --izzy-surface-2: #f1f2f4;
+  --izzy-hairline: #e4e6ea;
+  --izzy-text: #15171c;
+  --izzy-muted: #5b616e;
+  --izzy-steel: #475569;
+  --izzy-brand: #7c3aed;
+  --izzy-brand-strong: #7c3aed;
+  --izzy-brand-deep: #6d28d9;
+  --izzy-accent: #7c3aed;
+  --izzy-profit: #4d7c0f;
+}
+
 @theme inline {
-  /* IzzyKeep landing — "precision instrument" palette */
-  --color-izzy-bg: #0e0f12;
-  --color-izzy-surface: #16181d;
-  --color-izzy-surface-2: #1c1f26;
-  --color-izzy-hairline: #282c34;
-  --color-izzy-text: #eceef2;
-  --color-izzy-muted: #8a8f9a;
-  --color-izzy-steel: #9aa3b2;
-  --color-izzy-brand: #8b5cf6;
-  --color-izzy-brand-strong: #7c3aed;
-  --color-izzy-brand-deep: #6d28d9;
-  --color-izzy-accent: #a78bfa;
-  --color-izzy-profit: #a3e635;
+  /* IzzyKeep — "precision instrument" palette. Values flip via --izzy-* below
+     (dark default; .theme-light overrides for the app's day mode). */
+  --color-izzy-bg: var(--izzy-bg);
+  --color-izzy-surface: var(--izzy-surface);
+  --color-izzy-surface-2: var(--izzy-surface-2);
+  --color-izzy-hairline: var(--izzy-hairline);
+  --color-izzy-text: var(--izzy-text);
+  --color-izzy-muted: var(--izzy-muted);
+  --color-izzy-steel: var(--izzy-steel);
+  --color-izzy-brand: var(--izzy-brand);
+  --color-izzy-brand-strong: var(--izzy-brand-strong);
+  --color-izzy-brand-deep: var(--izzy-brand-deep);
+  --color-izzy-accent: var(--izzy-accent);
+  --color-izzy-profit: var(--izzy-profit);
   --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-data: var(--font-jetbrains), ui-monospace, monospace;

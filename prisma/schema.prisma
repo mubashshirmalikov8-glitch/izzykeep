@@ -1,13 +1,109 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// IzzyKeep — auto-parts warehouse, lots, sales, profit.
+// learn more: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// Prisma 7: connection URLs live in prisma.config.ts (migrations) and in the
+// pg adapter in src/lib/prisma.ts (runtime, pooled). Not here.
+datasource db {
+  provider = "postgresql"
+}
 
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
-datasource db {
-  provider = "postgresql"
+enum Role {
+  SELLER
+  INVESTOR
+}
+
+enum Plan {
+  FREE
+  PRO
+  BUSINESS
+}
+
+model User {
+  id          String   @id @default(cuid())
+  userCode    String   @unique @map("user_code")
+  email       String   @unique
+  googleId    String?  @unique @map("google_id")
+  name        String?
+  phone       String?
+  role        Role     @default(SELLER)
+  plan        Plan     @default(FREE)
+  profileDone Boolean  @default(false) @map("profile_done")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  createdLots Lot[]  @relation("LotCreator")
+  ownedLots   Lot[]  @relation("LotOwner")
+  sales       Sale[] @relation("SaleOwner")
+
+  @@map("users")
+}
+
+model Lot {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  currency  String   @default("USD")
+  rate      Decimal  @default(1) @db.Decimal(12, 4)
+  margin    Decimal  @default(0) @db.Decimal(6, 2)
+  creatorId String   @map("creator_id")
+  ownerId   String   @map("owner_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  creator User            @relation("LotCreator", fields: [creatorId], references: [id])
+  owner   User            @relation("LotOwner", fields: [ownerId], references: [id])
+  items   WarehouseItem[]
+  sales   Sale[]
+
+  @@index([ownerId])
+  @@map("lots")
+}
+
+model WarehouseItem {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  lotId     String   @map("lot_id")
+  partName  String   @map("part_name")
+  carName   String?  @map("car_name")
+  oem       String?
+  qty       Int // original quantity — never mutated; remaining is derived
+  unit      String   @default("шт")
+  costUsd   Decimal  @map("cost_usd") @db.Decimal(12, 2)
+  margin    Decimal  @default(0) @db.Decimal(6, 2)
+  salePrice Decimal  @map("sale_price") @db.Decimal(12, 2)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  lot   Lot    @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  sales Sale[]
+
+  @@index([lotId])
+  @@map("warehouse_items")
+}
+
+model Sale {
+  id        String   @id @default(cuid())
+  lotId     String   @map("lot_id")
+  itemId    String   @map("item_id")
+  ownerId   String   @map("owner_id")
+  qty       Int
+  salePrice Decimal  @map("sale_price") @db.Decimal(12, 2)
+  total     Decimal  @db.Decimal(14, 2)
+  seller    String?
+  soldAt    DateTime @default(now()) @map("sold_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lot   Lot           @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  item  WarehouseItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  owner User          @relation("SaleOwner", fields: [ownerId], references: [id])
+
+  @@index([itemId])
+  @@index([lotId])
+  @@index([ownerId])
+  @@map("sales")
 }
