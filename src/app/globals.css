@@ -5,6 +5,23 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* IzzyKeep landing — "precision instrument" palette */
+  --color-izzy-bg: #0e0f12;
+  --color-izzy-surface: #16181d;
+  --color-izzy-surface-2: #1c1f26;
+  --color-izzy-hairline: #282c34;
+  --color-izzy-text: #eceef2;
+  --color-izzy-muted: #8a8f9a;
+  --color-izzy-steel: #9aa3b2;
+  --color-izzy-brand: #8b5cf6;
+  --color-izzy-brand-strong: #7c3aed;
+  --color-izzy-brand-deep: #6d28d9;
+  --color-izzy-accent: #a78bfa;
+  --color-izzy-profit: #a3e635;
+  --font-display: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-data: var(--font-jetbrains), ui-monospace, monospace;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -121,10 +138,40 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
   }
+  ::selection {
+    background: color-mix(in oklab, var(--color-izzy-brand) 35%, transparent);
+    color: var(--color-izzy-text);
+  }
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--color-izzy-accent);
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@utility blueprint-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-izzy-hairline) 60%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-izzy-hairline) 60%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 48px 48px;
 }
