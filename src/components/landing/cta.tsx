@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal } from "@/components/landing/reveal";
 
 export function CTA() {
@@ -18,12 +19,12 @@ export function CTA() {
               Заведите первый лот за пару минут и сразу увидите остатки и прибыль.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-              <a
-                href="#"
+              <Link
+                href="/login"
                 className="inline-flex items-center justify-center rounded-lg bg-izzy-brand-strong px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-izzy-brand-deep"
               >
                 Начать бесплатно
-              </a>
+              </Link>
               <a
                 href="#how"
                 className="inline-flex items-center justify-center rounded-lg border border-izzy-hairline px-6 py-3.5 text-sm font-medium text-izzy-text transition-colors hover:bg-izzy-surface"

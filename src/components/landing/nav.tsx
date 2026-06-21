@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/landing/logo";
 
@@ -47,18 +48,18 @@ export function Nav() {
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
-          <a
-            href="#"
+          <Link
+            href="/login"
             className="rounded-lg px-3.5 py-2 text-sm text-izzy-muted transition-colors hover:text-izzy-text"
           >
             Войти
-          </a>
-          <a
-            href="#cta"
+          </Link>
+          <Link
+            href="/login"
             className="rounded-lg bg-izzy-brand-strong px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-izzy-brand-deep"
           >
             Начать бесплатно
-          </a>
+          </Link>
         </div>
 
         <button
@@ -85,13 +86,13 @@ export function Nav() {
                 {l.label}
               </a>
             ))}
-            <a
-              href="#cta"
+            <Link
+              href="/login"
               onClick={() => setOpen(false)}
               className="mt-2 rounded-lg bg-izzy-brand-strong px-3.5 py-2.5 text-center text-sm font-medium text-white"
             >
               Начать бесплатно
-            </a>
+            </Link>
           </div>
         </div>
       )}

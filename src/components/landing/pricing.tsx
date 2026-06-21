@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal } from "@/components/landing/reveal";
 
 const PLANS = [
@@ -73,8 +74,8 @@ export function Pricing() {
                   ))}
                 </ul>
 
-                <a
-                  href="#cta"
+                <Link
+                  href="/login"
                   className={`mt-8 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
                     p.featured
                       ? "bg-izzy-brand-strong text-white hover:bg-izzy-brand-deep"
@@ -82,7 +83,7 @@ export function Pricing() {
                   }`}
                 >
                   {p.cta}
-                </a>
+                </Link>
               </div>
             </Reveal>
           ))}

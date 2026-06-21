@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { LedgerDemo } from "@/components/landing/ledger-demo";
 
 export function Hero() {
@@ -29,12 +30,12 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href="#cta"
+            <Link
+              href="/login"
               className="inline-flex items-center justify-center rounded-lg bg-izzy-brand-strong px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-izzy-brand-deep"
             >
               Начать бесплатно
-            </a>
+            </Link>
             <a
               href="#how"
               className="inline-flex items-center justify-center rounded-lg border border-izzy-hairline px-5 py-3 text-sm font-medium text-izzy-text transition-colors hover:bg-izzy-surface"
