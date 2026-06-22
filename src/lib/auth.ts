@@ -14,6 +14,7 @@ export async function getCurrentUser(): Promise<CurrentUser> {
     where: { email: DEMO_USER.email },
     update: {},
     create: {
+      id: DEMO_USER.id,
       email: DEMO_USER.email,
       name: DEMO_USER.name,
       userCode: DEMO_USER.userCode,
