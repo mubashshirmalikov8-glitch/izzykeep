@@ -11,6 +11,7 @@ export type CurrentUser = {
   userCode: string;
   role: Role;
   plan: Plan;
+  profileDone: boolean;
 };
 
 export type LotRow = {

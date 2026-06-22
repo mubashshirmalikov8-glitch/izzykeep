@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { Atmosphere } from "@/components/atmosphere/atmosphere";
 import { Sidebar } from "@/components/app/sidebar";
@@ -13,6 +14,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const cookieStore = await cookies();
   const light = cookieStore.get("izzy-theme")?.value === "light";
   const user = await getCurrentUser();
+  if (!user.profileDone) redirect("/complete-profile");
 
   return (
     <div

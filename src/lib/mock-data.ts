@@ -10,6 +10,7 @@ export const DEMO_USER: CurrentUser = {
   userCode: "1024753",
   role: "SELLER",
   plan: "PRO",
+  profileDone: true,
 };
 
 export type MockLot = {

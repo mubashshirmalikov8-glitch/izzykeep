@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Settings, User as UserIcon, LogOut } from "lucide-react";
 import type { CurrentUser } from "@/lib/types";
+import { createClient } from "@/lib/supabase/client";
 
 export function AccountMenu({ user }: { user: CurrentUser }) {
   const [open, setOpen] = useState(false);
@@ -48,9 +49,21 @@ export function AccountMenu({ user }: { user: CurrentUser }) {
               Настройки
             </MenuLink>
             <div className="my-1 border-t border-izzy-hairline" />
-            <MenuLink href="/login" icon={<LogOut className="size-4" strokeWidth={1.75} />} onClick={() => setOpen(false)}>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={async () => {
+                setOpen(false);
+                await createClient().auth.signOut();
+                window.location.href = "/login";
+              }}
+              className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-izzy-text transition-colors hover:bg-izzy-surface-2"
+            >
+              <span className="text-izzy-muted">
+                <LogOut className="size-4" strokeWidth={1.75} />
+              </span>
               Выйти
-            </MenuLink>
+            </button>
           </div>
         </>
       )}
