@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Atmosphere } from "@/components/atmosphere/atmosphere";
 import { Logo } from "@/components/landing/logo";
 
 export const metadata: Metadata = {
@@ -33,11 +34,7 @@ function GoogleMark() {
 export default function LoginPage() {
   return (
     <main className="relative grid flex-1 place-items-center overflow-hidden px-5 py-16">
-      {/* ambient — consistent with hero / cta */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="blueprint-grid absolute inset-0 opacity-25 [mask-image:radial-gradient(ellipse_55%_55%_at_50%_40%,black,transparent)]" />
-        <div className="absolute left-1/2 top-1/3 size-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-izzy-brand/15 blur-[120px]" />
-      </div>
+      <Atmosphere variant="auth" />
 
       <div className="w-full max-w-sm">
         <Link href="/" className="mx-auto flex w-fit items-center gap-2" aria-label="IzzyKeep — на главную">
@@ -45,7 +42,7 @@ export default function LoginPage() {
           <span className="font-display text-lg font-bold tracking-tight">IzzyKeep</span>
         </Link>
 
-        <div className="mt-8 rounded-2xl border border-izzy-hairline bg-izzy-surface p-7 shadow-2xl shadow-black/40">
+        <div className="glass mt-8 rounded-2xl p-7">
           <h1 className="text-center font-display text-2xl font-bold tracking-tight">
             Вход в IzzyKeep
           </h1>

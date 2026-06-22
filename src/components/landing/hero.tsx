@@ -4,12 +4,6 @@ import { LedgerDemo } from "@/components/landing/ledger-demo";
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
-      {/* ambient: blueprint grid + violet glow, hero only */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="blueprint-grid absolute inset-0 opacity-[0.35] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)]" />
-        <div className="absolute left-1/2 top-[-12rem] size-[40rem] -translate-x-1/2 rounded-full bg-izzy-brand/20 blur-[120px]" />
-      </div>
-
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-16 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pb-32 lg:pt-24">
         {/* thesis */}
         <div>

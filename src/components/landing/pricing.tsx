@@ -45,7 +45,7 @@ export function Pricing() {
           {PLANS.map((p, i) => (
             <Reveal key={p.name} delay={i * 0.08}>
               <div
-                className={`flex h-full flex-col rounded-2xl border p-7 ${
+                className={`flex h-full flex-col rounded-2xl border p-7 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-premium ${
                   p.featured
                     ? "border-izzy-brand bg-izzy-surface ring-1 ring-izzy-brand/40"
                     : "border-izzy-hairline bg-izzy-surface"

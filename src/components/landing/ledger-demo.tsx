@@ -79,7 +79,7 @@ export function LedgerDemo() {
   return (
     <div
       ref={root}
-      className="w-full overflow-hidden rounded-2xl border border-izzy-hairline bg-izzy-surface shadow-2xl shadow-black/40"
+      className="glass w-full overflow-hidden rounded-2xl"
     >
       {/* tab header */}
       <div className="flex items-center justify-between border-b border-izzy-hairline bg-izzy-surface-2 px-4 py-3">

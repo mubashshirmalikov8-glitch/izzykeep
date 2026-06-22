@@ -39,7 +39,7 @@ export function Features() {
         <div className="mt-12 grid gap-5 sm:grid-cols-2">
           {FEATURES.map((f, i) => (
             <Reveal key={f.title} delay={(i % 2) * 0.08}>
-              <div className="group h-full rounded-2xl border border-izzy-hairline bg-izzy-surface p-7 transition-colors hover:border-izzy-brand/40">
+              <div className="group h-full rounded-2xl border border-izzy-hairline bg-izzy-surface p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-izzy-brand/40 hover:shadow-premium">
                 <span className="inline-block rounded-md bg-izzy-surface-2 px-2.5 py-1 font-data text-xs text-izzy-steel">
                   {f.code}
                 </span>

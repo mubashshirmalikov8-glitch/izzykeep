@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { getCurrentUser } from "@/lib/auth";
+import { Atmosphere } from "@/components/atmosphere/atmosphere";
 import { Sidebar } from "@/components/app/sidebar";
 import { Topbar } from "@/components/app/topbar";
 
@@ -16,8 +17,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div
       id="app-root"
-      className={`${light ? "theme-light " : ""}flex min-h-screen bg-izzy-bg text-izzy-text`}
+      className={`${light ? "theme-light " : ""}relative isolate flex min-h-screen bg-izzy-bg text-izzy-text`}
     >
+      <Atmosphere variant="app" />
       <Sidebar user={user} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar user={user} />
