@@ -46,7 +46,7 @@ export function LanguageSwitcher() {
           />
           <div
             role="menu"
-            className="absolute right-0 z-40 mt-2 w-40 overflow-hidden rounded-lg border border-izzy-hairline bg-izzy-surface py-1 shadow-xl shadow-black/30"
+            className="shadow-premium absolute right-0 z-40 mt-2 w-40 overflow-hidden rounded-lg border border-izzy-hairline bg-izzy-surface py-1"
           >
             {LANGS.map((l) => (
               <button

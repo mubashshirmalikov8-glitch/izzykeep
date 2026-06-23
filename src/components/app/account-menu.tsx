@@ -36,7 +36,7 @@ export function AccountMenu({ user }: { user: CurrentUser }) {
           />
           <div
             role="menu"
-            className="absolute right-0 z-40 mt-2 w-56 overflow-hidden rounded-lg border border-izzy-hairline bg-izzy-surface py-1 shadow-xl shadow-black/30"
+            className="shadow-premium absolute right-0 z-40 mt-2 w-56 overflow-hidden rounded-lg border border-izzy-hairline bg-izzy-surface py-1"
           >
             <div className="border-b border-izzy-hairline px-3 py-3">
               <p className="truncate text-sm font-medium text-izzy-text">{user.name}</p>

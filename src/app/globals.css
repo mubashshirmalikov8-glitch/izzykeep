@@ -190,6 +190,14 @@
     outline-offset: 2px;
     border-radius: 0.375rem;
   }
+  /* Form controls use focus:outline-none + border; add a clear ring for keyboard
+     users (box-shadow isn't overridden by the outline utility). */
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-izzy-brand) 55%, transparent);
+    border-color: var(--color-izzy-brand);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
