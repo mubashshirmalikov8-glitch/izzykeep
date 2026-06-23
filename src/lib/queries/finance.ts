@@ -59,7 +59,7 @@ function compute(lots: LotN[], items: ItemN[], sales: SaleN[]): FinanceSummary {
   };
 }
 
-export async function getFinanceSummary(): Promise<FinanceSummary> {
+export async function getFinanceSummary(ownerId?: string): Promise<FinanceSummary> {
   if (!DB_READY) {
     const lots = MOCK_LOTS.map((l) => ({ id: l.id, code: l.code, name: l.name, currency: l.currency }));
     const items = MOCK_ITEMS.map((i) => ({ id: i.id, lotId: i.lotId, qty: i.qty, costUsd: i.costUsd }));
@@ -74,10 +74,10 @@ export async function getFinanceSummary(): Promise<FinanceSummary> {
     return compute(lots, items, sales);
   }
 
-  const user = await getCurrentUser();
+  const owner = ownerId ?? (await getCurrentUser()).id;
   const { prisma } = await import("../prisma");
   const lots = await prisma.lot.findMany({
-    where: { ownerId: user.id },
+    where: { ownerId: owner },
     include: { items: { include: { sales: true } } },
   });
 

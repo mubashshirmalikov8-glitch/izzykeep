@@ -7,7 +7,7 @@ import { MOCK_ITEMS, MOCK_LOTS, MOCK_SALES } from "../mock-data";
 // Each function has two paths: mock (no DB yet) and live Prisma (DATABASE_URL set).
 // The core invariant — remaining = qty − Σ(sales.qty) — is identical in both.
 
-export async function getWarehouseRows(): Promise<WarehouseRow[]> {
+export async function getWarehouseRows(ownerId?: string): Promise<WarehouseRow[]> {
   if (!DB_READY) {
     return MOCK_ITEMS.map((it) => {
       const lot = MOCK_LOTS.find((l) => l.id === it.lotId)!;
@@ -30,10 +30,10 @@ export async function getWarehouseRows(): Promise<WarehouseRow[]> {
     });
   }
 
-  const user = await getCurrentUser();
+  const owner = ownerId ?? (await getCurrentUser()).id;
   const { prisma } = await import("../prisma");
   const items = await prisma.warehouseItem.findMany({
-    where: { lot: { ownerId: user.id } },
+    where: { lot: { ownerId: owner } },
     include: { lot: true, sales: true },
     orderBy: { createdAt: "desc" },
   });

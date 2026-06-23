@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { DB_READY } from "@/lib/db-ready";
 import { getCurrentUser } from "@/lib/auth";
+import * as inventory from "@/lib/domain/inventory";
 
 export type ActionResult = { ok: boolean; message: string };
 
@@ -12,102 +13,60 @@ const NO_DB: ActionResult = {
     "База данных не подключена. Добавьте DATABASE_URL и примените миграцию, чтобы сохранять данные.",
 };
 
-function genCode(prefix: string): string {
-  return `${prefix}-${Math.random().toString(16).slice(2, 10).toUpperCase()}`;
-}
-
-export async function createLot(
-  _prev: ActionResult | null,
-  fd: FormData,
-): Promise<ActionResult> {
+export async function createLot(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
   if (!DB_READY) return NO_DB;
-
-  const name = String(fd.get("name") ?? "").trim();
-  if (!name) return { ok: false, message: "Введите название лота." };
-  const currency = String(fd.get("currency") ?? "USD");
-  const rate = Number(fd.get("rate") ?? 1) || 1;
-  const margin = Number(fd.get("margin") ?? 0) || 0;
-
   const user = await getCurrentUser();
-  const { prisma } = await import("@/lib/prisma");
-  await prisma.lot.create({
-    data: { code: genCode("LOT"), name, currency, rate, margin, creatorId: user.id, ownerId: user.id },
+  const res = await inventory.createLot({
+    ownerId: user.id,
+    name: String(fd.get("name") ?? ""),
+    currency: String(fd.get("currency") ?? "USD"),
+    rate: Number(fd.get("rate") ?? 1) || 1,
+    margin: Number(fd.get("margin") ?? 0) || 0,
   });
-
-  revalidatePath("/app/lots");
-  revalidatePath("/app");
-  return { ok: true, message: `Лот «${name}» создан.` };
+  if (res.ok) {
+    revalidatePath("/app/lots");
+    revalidatePath("/app");
+  }
+  return { ok: res.ok, message: res.message };
 }
 
-export async function addItem(
-  _prev: ActionResult | null,
-  fd: FormData,
-): Promise<ActionResult> {
+export async function addItem(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
   if (!DB_READY) return NO_DB;
-
+  const user = await getCurrentUser();
   const lotId = String(fd.get("lotId") ?? "");
-  const partName = String(fd.get("partName") ?? "").trim();
   if (!lotId) return { ok: false, message: "Выберите лот." };
-  if (!partName) return { ok: false, message: "Введите название запчасти." };
-  const qty = parseInt(String(fd.get("qty") ?? "0"), 10);
-  if (!(qty > 0)) return { ok: false, message: "Количество должно быть больше 0." };
-  const costUsd = Number(fd.get("costUsd") ?? 0) || 0;
-  const salePrice = Number(fd.get("salePrice") ?? 0) || 0;
-  const carName = String(fd.get("carName") ?? "").trim() || null;
-  const oem = String(fd.get("oem") ?? "").trim() || null;
-
-  const user = await getCurrentUser();
-  const { prisma } = await import("@/lib/prisma");
-  const lot = await prisma.lot.findFirst({ where: { id: lotId, ownerId: user.id } });
-  if (!lot) return { ok: false, message: "Лот не найден." };
-
-  await prisma.warehouseItem.create({
-    data: { code: genCode("ITEM"), lotId, partName, carName, oem, qty, costUsd, salePrice, margin: lot.margin },
+  const res = await inventory.addItem({
+    ownerId: user.id,
+    lotId,
+    partName: String(fd.get("partName") ?? ""),
+    carName: String(fd.get("carName") ?? "").trim() || null,
+    oem: String(fd.get("oem") ?? "").trim() || null,
+    qty: parseInt(String(fd.get("qty") ?? "0"), 10),
+    costUsd: Number(fd.get("costUsd") ?? 0) || 0,
+    salePrice: Number(fd.get("salePrice") ?? 0) || 0,
   });
-
-  revalidatePath("/app");
-  revalidatePath("/app/lots");
-  return { ok: true, message: `Позиция «${partName}» добавлена.` };
+  if (res.ok) {
+    revalidatePath("/app");
+    revalidatePath("/app/lots");
+  }
+  return { ok: res.ok, message: res.message };
 }
 
-export async function recordSale(
-  _prev: ActionResult | null,
-  fd: FormData,
-): Promise<ActionResult> {
+export async function recordSale(_prev: ActionResult | null, fd: FormData): Promise<ActionResult> {
   if (!DB_READY) return NO_DB;
-
-  const itemId = String(fd.get("itemId") ?? "");
-  const qty = parseInt(String(fd.get("qty") ?? "0"), 10);
-  const inputPrice = Number(fd.get("salePrice") ?? 0) || 0;
-  if (!itemId) return { ok: false, message: "Позиция не выбрана." };
-  if (!(qty > 0)) return { ok: false, message: "Количество должно быть больше 0." };
-
   const user = await getCurrentUser();
-  const { prisma } = await import("@/lib/prisma");
-  const item = await prisma.warehouseItem.findFirst({
-    where: { id: itemId, lot: { ownerId: user.id } },
-    include: { sales: true },
+  const itemId = String(fd.get("itemId") ?? "");
+  if (!itemId) return { ok: false, message: "Позиция не выбрана." };
+  const res = await inventory.recordSale({
+    ownerId: user.id,
+    itemId,
+    qty: parseInt(String(fd.get("qty") ?? "0"), 10),
+    salePrice: Number(fd.get("salePrice") ?? 0) || 0,
+    seller: user.name,
   });
-  if (!item) return { ok: false, message: "Позиция не найдена." };
-
-  const sold = item.sales.reduce((a, s) => a + s.qty, 0);
-  const remaining = item.qty - sold;
-  if (qty > remaining) return { ok: false, message: `Недостаточно остатка. Доступно: ${remaining}.` };
-
-  const price = inputPrice > 0 ? inputPrice : Number(item.salePrice);
-  await prisma.sale.create({
-    data: {
-      itemId,
-      lotId: item.lotId,
-      ownerId: user.id,
-      qty,
-      salePrice: price,
-      total: price * qty,
-      seller: user.name,
-    },
-  });
-
-  revalidatePath("/app");
-  revalidatePath("/app/sold");
-  return { ok: true, message: "Продажа записана." };
+  if (res.ok) {
+    revalidatePath("/app");
+    revalidatePath("/app/sold");
+  }
+  return { ok: res.ok, message: res.message };
 }

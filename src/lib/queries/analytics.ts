@@ -117,7 +117,7 @@ function compute(items: ItemN[], sales: SaleN[], lots: LotN[], currency: string)
   return { currency, salesByDay, topSelling, profitByProduct, profitByLot, abc, forecast, lowStock, slowMoving };
 }
 
-export async function getAnalytics(): Promise<AnalyticsData> {
+export async function getAnalytics(ownerId?: string): Promise<AnalyticsData> {
   if (!DB_READY) {
     const lotByIdMock = new Map(MOCK_LOTS.map((l) => [l.id, l]));
     const items: ItemN[] = MOCK_ITEMS.map((i) => ({
@@ -141,10 +141,10 @@ export async function getAnalytics(): Promise<AnalyticsData> {
     return compute(items, sales, lots, MOCK_LOTS[0]?.currency ?? "USD");
   }
 
-  const user = await getCurrentUser();
+  const owner = ownerId ?? (await getCurrentUser()).id;
   const { prisma } = await import("../prisma");
   const lots = await prisma.lot.findMany({
-    where: { ownerId: user.id },
+    where: { ownerId: owner },
     include: { items: { include: { sales: true } } },
   });
 

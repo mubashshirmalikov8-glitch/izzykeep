@@ -37,6 +37,10 @@ model User {
   role        Role     @default(SELLER)
   plan        Plan     @default(FREE)
   profileDone Boolean  @default(false) @map("profile_done")
+
+  telegramId          String?   @unique @map("telegram_id")
+  telegramLinkCode    String?   @unique @map("telegram_link_code")
+  telegramLinkExpires DateTime? @map("telegram_link_expires")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -110,4 +114,15 @@ model Sale {
   @@index([lotId])
   @@index([ownerId])
   @@map("sales")
+}
+
+// Per-Telegram-user wizard state for multi-step bot commands (serverless-safe).
+model BotState {
+  telegramId String   @id @map("telegram_id")
+  command    String
+  step       Int      @default(0)
+  data       Json     @default("{}")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("bot_state")
 }
