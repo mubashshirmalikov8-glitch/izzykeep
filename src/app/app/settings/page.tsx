@@ -1,28 +1,58 @@
 import { PageHeader } from "@/components/app/page-header";
-import { TelegramLink } from "./telegram-link";
+import { ProfileForm } from "./profile-form";
+import { CompanyForm } from "./company-form";
+import { TelegramSection } from "./telegram-section";
+import { SecuritySection } from "./security-section";
+import { AppearanceSection } from "./appearance-section";
+import { getAccount } from "@/lib/queries/account";
 
-export default function SettingsPage() {
+function Card({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <PageHeader title="Настройки" />
+    <section className="rounded-2xl border border-izzy-hairline bg-izzy-surface p-6">
+      <h2 className="font-display text-lg font-semibold">{title}</h2>
+      {description && <p className="mt-1.5 max-w-md text-sm text-izzy-muted">{description}</p>}
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
 
-      <section className="rounded-2xl border border-izzy-hairline bg-izzy-surface p-6">
-        <h2 className="font-display text-lg font-semibold">Telegram-бот</h2>
-        <p className="mt-1.5 max-w-md text-sm text-izzy-muted">
-          Привяжите Telegram, чтобы вести склад, продажи и отчёты прямо из бота. Данные общие с
-          сайтом.
-        </p>
-        <div className="mt-5">
-          <TelegramLink />
-        </div>
-      </section>
+export default async function SettingsPage() {
+  const a = await getAccount();
 
-      <section className="rounded-2xl border border-izzy-hairline bg-izzy-surface p-6">
-        <h2 className="font-display text-lg font-semibold">Профиль и интерфейс</h2>
-        <p className="mt-1.5 text-sm text-izzy-muted">
-          Имя, язык, тема и уведомления — появятся в следующем обновлении.
-        </p>
-      </section>
+  return (
+    <div className="mx-auto max-w-3xl space-y-5">
+      <PageHeader title="Настройки" subtitle="Профиль, компания, Telegram, безопасность и вид" />
+
+      <Card title="Профиль">
+        <ProfileForm defaultName={a.name} defaultPhone={a.phone} email={a.email} userCode={a.userCode} />
+      </Card>
+
+      <Card title="Компания">
+        <CompanyForm defaultCompanyName={a.companyName} role={a.role} plan={a.plan} />
+      </Card>
+
+      <Card
+        title="Telegram"
+        description="Привяжите Telegram, чтобы вести склад, продажи и отчёты из бота. Данные общие с сайтом."
+      >
+        <TelegramSection linked={a.telegramLinked} telegramId={a.telegramId} />
+      </Card>
+
+      <Card title="Безопасность">
+        <SecuritySection email={a.email} />
+      </Card>
+
+      <Card title="Внешний вид">
+        <AppearanceSection />
+      </Card>
     </div>
   );
 }

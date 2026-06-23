@@ -88,6 +88,19 @@ export type FinanceSummary = {
   profitByLot: LotProfit[];
 };
 
+export type AccountSettings = {
+  name: string;
+  companyName: string;
+  email: string;
+  phone: string;
+  userCode: string;
+  role: Role;
+  plan: Plan;
+  telegramLinked: boolean;
+  telegramId: string | null;
+  joinedAt: string;
+};
+
 export type SalesDayPoint = { date: string; units: number; revenue: number };
 export type BarDatum = { label: string; value: number; display: string };
 export type AbcRow = {
