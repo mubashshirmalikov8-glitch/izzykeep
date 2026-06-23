@@ -42,6 +42,23 @@ export type WarehouseRow = {
   lotCode: string;
 };
 
+export type FinancePoint = { date: string; revenue: number };
+export type LotProfit = { code: string; name: string; profit: number };
+
+export type FinanceSummary = {
+  revenue: number;
+  profit: number;
+  investments: number;
+  roi: number; // percent
+  lotsCount: number;
+  productsCount: number;
+  salesCount: number;
+  aov: number;
+  currency: string;
+  revenueByDay: FinancePoint[];
+  profitByLot: LotProfit[];
+};
+
 export type SaleRow = {
   id: string;
   soldAt: string; // ISO
