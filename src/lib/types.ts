@@ -59,6 +59,50 @@ export type FinanceSummary = {
   profitByLot: LotProfit[];
 };
 
+export type SalesDayPoint = { date: string; units: number; revenue: number };
+export type BarDatum = { label: string; value: number; display: string };
+export type AbcRow = {
+  code: string;
+  name: string;
+  revenue: number;
+  share: number; // %
+  cumulative: number; // %
+  cls: "A" | "B" | "C";
+};
+export type ForecastRow = {
+  code: string;
+  name: string;
+  remaining: number;
+  perDay: number;
+  daysOfCover: number | null;
+  eta: string | null; // ISO date
+};
+export type LowStockRow = {
+  code: string;
+  name: string;
+  remaining: number;
+  daysOfCover: number | null;
+  reason: string;
+};
+export type SlowRow = {
+  code: string;
+  name: string;
+  sold: number;
+  remaining: number;
+  sellThrough: number; // %
+};
+export type AnalyticsData = {
+  currency: string;
+  salesByDay: SalesDayPoint[];
+  topSelling: BarDatum[];
+  profitByProduct: BarDatum[];
+  profitByLot: BarDatum[];
+  abc: AbcRow[];
+  forecast: ForecastRow[];
+  lowStock: LowStockRow[];
+  slowMoving: SlowRow[];
+};
+
 export type SaleRow = {
   id: string;
   soldAt: string; // ISO
