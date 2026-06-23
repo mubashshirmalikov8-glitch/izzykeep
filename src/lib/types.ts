@@ -1,8 +1,37 @@
 // Domain view-models used by the app UI. Decoupled from Prisma so pages can
 // render from mock data now and from the live DB once DATABASE_URL is set.
 
-export type Role = "SELLER" | "INVESTOR";
+export type Role = "OWNER" | "MANAGER" | "SELLER" | "INVESTOR";
 export type Plan = "FREE" | "PRO" | "BUSINESS";
+
+export type CompanyMember = {
+  id: string;
+  name: string;
+  email: string;
+  role: Role;
+  isOwner: boolean;
+};
+export type ActivityItem = {
+  at: string; // ISO
+  kind: "sale" | "lot" | "item";
+  text: string;
+  amount: string | null;
+};
+export type CompanyData = {
+  companyName: string;
+  ownerName: string;
+  email: string;
+  userCode: string;
+  plan: Plan;
+  joinedAt: string;
+  lotsCount: number;
+  productsCount: number;
+  salesCount: number;
+  revenue: number;
+  currency: string;
+  members: CompanyMember[];
+  activity: ActivityItem[];
+};
 
 export type CurrentUser = {
   id: string;

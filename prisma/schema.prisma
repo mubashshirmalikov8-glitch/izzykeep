@@ -13,6 +13,8 @@ generator client {
 }
 
 enum Role {
+  OWNER
+  MANAGER
   SELLER
   INVESTOR
 }
@@ -30,6 +32,7 @@ model User {
   authId      String?  @unique @map("auth_id") // Supabase auth.users.id (UUID)
   googleId    String?  @unique @map("google_id")
   name        String?
+  companyName String?  @map("company_name")
   phone       String?
   role        Role     @default(SELLER)
   plan        Plan     @default(FREE)

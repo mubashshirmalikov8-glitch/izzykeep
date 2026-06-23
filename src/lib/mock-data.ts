@@ -8,7 +8,7 @@ export const DEMO_USER: CurrentUser = {
   name: "Иван",
   email: "demo@izzykeep.uz",
   userCode: "1024753",
-  role: "SELLER",
+  role: "OWNER",
   plan: "PRO",
   profileDone: true,
 };
